@@ -1,0 +1,26 @@
+[
+  {
+    "button_text": "order_android",
+    "selected": false
+  },
+  {
+    "button_text": "order_iphone",
+    "selected": false
+  },
+  {
+    "button_text": "order_web",
+    "selected": false
+  },
+  {
+    "button_text": "order_web3",
+    "selected": false
+  },
+  {
+    "button_text": "order_desktop",
+    "selected": false
+  },
+  {
+    "button_text": "order_tg-bot",
+    "selected": false
+  }
+]

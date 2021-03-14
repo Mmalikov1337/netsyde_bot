@@ -1,67 +1,19 @@
 import telebot
 from telebot import types, apihelper
 import config
-import json
+from math import ceil
 import re
+import info
+import json
 
 apihelper.ENABLE_MIDDLEWARE = True
 
 bot = telebot.TeleBot(config.TOKEN)
 
-TRANSLATIONS = {
-	"start": {
-		"en": "Hello",
-		"ru": "привет"
-	},
-	"start_button_about": {
-		'en': "About us",
-		'ru': 'О нас'
-	},
-	'start_button_projects': {
-		'en': 'Our projects',
-		'ru': 'Наши проекты'
-	},
-	'start_button_order': {
-		'en': 'Our services',
-		'ru': 'Наши услуги'
-	},
-	'about': {
-		'en': "<strong>About us</strong>\nWe help organizations unlock potential growth in the arena of digital "
-		      "innovation and presence. We ideate and test concepts and turn them into business to fix their corporate "
-		      "strategy.",
-		'ru': "<strong>О нас</strong>\nМы помогаем организациям раскрыть потенциал роста в сфере цифровых инноваций и "
-		      "присутствия. Мы придумываем и тестируем концепции и превращаем их в бизнес, чтобы закрепить их "
-		      "корпоративную стратегию. "
-	},
-	"projects_button_info": {
-		'en': 'More info',
-		'ru': 'Детальная информация'
-	},
-	"projects_button_site": {
-		'en': 'Project website',
-		'ru': 'Сайт проекта'
-	}, "projects_button_back": {
-		'en': 'Back',
-		'ru': 'Назад'
-	},
-	"projects_decrybe": {
-		'en': 'projects_decrybe website',
-		'ru': 'Сайт проекта'
-	},
-	"projects_cryptobot": {
-		'en': 'projects_cryptobot website',
-		'ru': 'Сайт проекта'
-	}
-}
+TRANSLATIONS = json.loads(info.translations.text)
+URLS = json.loads(info.translations.urls)
 
-URLS = {
-	"github": "https://github.com/netsyde",
-	"twitter": "https://twitter.com/netsydeplatform",
-	"channel": "https://t.me/netsyde"
-}
 _lang = 'en'
-
-_lorem = """Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32."""
 
 
 def set_lang(lang: str):
@@ -73,16 +25,18 @@ def tr(string: str):
 	return TRANSLATIONS[string][_lang]
 
 
+PROJECTS = json.loads(info.translations.projects)
+SERVICES = json.loads(info.translations.services)
+
 _project_index = 0
 
-PROJECTS = [
-	{"name": "decrybe", "image": "media/images/cc.png", "description": tr("projects_decrybe"), "info": _lorem,
-	 "site": "netsy.de"},
-	{"name": "crypto", "image": "media/images/dec.png", "description": tr("projects_cryptobot"), "info": _lorem,
-	 "site": "netsy.de"}
-]
+_order_page = 0
+_on_page = 5
+_max_pages = ceil(len(SERVICES) / _on_page)
+_wait_contact = False
 
 
+# PROJECT FUNCTIONS
 def next_proj():
 	global _project_index
 	if _project_index + 1 >= len(PROJECTS):
@@ -108,6 +62,25 @@ def get_project_val(val: str):
 	return PROJECTS[_project_index][val]
 
 
+# Order functions
+def next_order():
+	global _order_page
+	if _order_page + 1 >= _max_pages:
+		_order_page = 0
+	else:
+		_order_page += 1
+
+
+def prev_order():
+	global _order_page
+	if _order_page - 1 < 0:
+		_order_page = _max_pages - 1
+	else:
+		_order_page -= 1
+
+
+# KEYBOARDS
+# Projects
 def project_kb():
 	markup = types.InlineKeyboardMarkup()
 	markup.row(
@@ -135,14 +108,68 @@ def pages_kb():
 	markup = types.InlineKeyboardMarkup()
 	for index, item in enumerate(PROJECTS):
 		markup.add(types.InlineKeyboardButton(f"{index + 1} - {item['name']}", callback_data=f"projects_set_{index}"))
-
 	return markup
 
 
+# Order
+def order_kb():
+	def get_slice(array, page, on_page):
+		last_index = len(array) - 1
+		start = page * on_page
+		end = start + on_page
+		if end > last_index:
+			end = last_index
+		return array[start:end]
+
+	def get_emoji(val: bool):
+		return "\U00002714" if val else "\U00002716"
+
+	markup = types.InlineKeyboardMarkup()
+	for index, item in enumerate(get_slice(SERVICES, _order_page, _on_page)):
+		markup.add(
+			types.InlineKeyboardButton(tr(item["button_text"]) + get_emoji(item["selected"]),
+			                           callback_data=f"order_select_{_order_page * _on_page + index}"))
+	if _on_page < len(SERVICES) - 1:
+		markup.row(
+			types.InlineKeyboardButton("\U0001F878", callback_data="order_prev"),
+			types.InlineKeyboardButton(f"{_order_page + 1}/{_max_pages}", callback_data="order_pages"),
+			types.InlineKeyboardButton("\U0001F87A", callback_data="order_next"),
+		)
+	markup.row(types.InlineKeyboardButton(tr("order_make"), callback_data="order_make"))
+	return markup
+
+
+def order_pages_kb():
+	markup = types.InlineKeyboardMarkup(row_width=3)
+	buttons = []
+	for item in range(0, _max_pages):
+		buttons.append(types.InlineKeyboardButton(f"{item + 1}", callback_data=f"order_set_page_{item}"))
+	markup.add(*buttons)
+	return markup
+
+
+def order_back_kb():
+	markup = types.InlineKeyboardMarkup(row_width=2)
+	markup.row(
+		types.InlineKeyboardButton(tr("order_confirm_button"), callback_data=f"order_confirm"),
+		types.InlineKeyboardButton(tr("order_not_confirm_button"), callback_data=f"order_back"),
+	)
+	return markup
+
+
+def order_get_contact_kb():
+	markup = types.InlineKeyboardMarkup()
+	markup.row(
+		types.InlineKeyboardButton(tr("order_get_contact_button"), callback_data=f"order_get_contact"),
+	)
+	return markup
+
+
+#
 def edit_project_media(chat_id, message_id, keyboard=project_kb, project_value="description"):
 	with open(get_project_val("image"), 'rb') as photo:
 		bot.edit_message_media(
-			media=types.InputMediaPhoto(media=photo, parse_mode="HTML", caption=get_project_val(project_value)),
+			media=types.InputMediaPhoto(media=photo, parse_mode="HTML", caption=tr(get_project_val(project_value))),
 			chat_id=chat_id,
 			message_id=message_id,
 			reply_markup=keyboard()
@@ -157,14 +184,15 @@ def get_str_checker(text: str):
 
 
 def get_new_index(val: str) -> int:
-	index = re.findall(r"(\d+)", val)[0]
+	index = re.findall(r"\d+", val)[0]
 	if index.isdigit():
 		return int(index)
+	return 0
 
 
 @bot.middleware_handler(update_types=["message"])
 def modify_message(_: telebot.TeleBot, message: types.Message):
-	print("from:", message.from_user.to_dict()["username"], message.from_user.to_dict()["language_code"])
+	print("from:", message.from_user.to_dict()["username"], message.from_user.to_dict()["language_code"], message)
 	if message.sticker:
 		print("file_id:", message.sticker.file_id)
 	else:
@@ -181,6 +209,14 @@ def welcome(msg: types.Message):
 		types.KeyboardButton("Change language \U0001F202")
 	)
 	bot.send_message(msg.chat.id, tr('start'), parse_mode="HTML", reply_markup=markup)
+
+
+@bot.message_handler(func=lambda call: _wait_contact)
+def get_contact(msg: types.Message):
+	global _wait_contact
+	_wait_contact = False
+	print(msg.text, _wait_contact)
+	bot.edit_message_text(tr("order_get_contact_final"), msg.chat.id, msg.id - 1, parse_mode="HTML")
 
 
 # ABOUT
@@ -202,7 +238,7 @@ def projects(msg: types.Message):
 		bot.send_photo(
 			msg.chat.id,
 			photo,
-			caption=get_project_val("description"),
+			caption=tr(get_project_val("description")),
 			disable_notification=True,
 			reply_markup=project_kb()
 		)
@@ -242,5 +278,90 @@ def project_pages_info(call: types.CallbackQuery):
 	edit_project_media(call.message.chat.id, call.message.id)
 
 
-#
+# ORDER
+@bot.message_handler(func=get_str_checker("start_button_order"))
+def order(msg: types.Message):
+	bot.send_message(msg.chat.id, tr("order"), parse_mode="HTML", reply_markup=order_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "order_prev")
+def projects_prev(call: types.CallbackQuery):
+	prev_order()
+	bot.edit_message_text(tr("order"), call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "order_next")
+def projects_next(call: types.CallbackQuery):
+	next_order()
+	bot.edit_message_text(tr("order"), call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "order_pages")
+def project_pages(call: types.CallbackQuery):
+	bot.edit_message_text(tr("order_pages"), call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_pages_kb())
+
+
+@bot.callback_query_handler(func=lambda call: "order_set_page_" in call.data)
+def project_set_page(call: types.CallbackQuery):
+	global _order_page
+	_order_page = get_new_index(call.data)
+	bot.edit_message_text(tr("order"), call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "order_dont_know" or call.data == "order_info")
+def project_set_page(call: types.CallbackQuery):
+	# toggle_order_mode()
+	bot.edit_message_text(tr(call.data), call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_kb())
+
+
+@bot.callback_query_handler(func=lambda call: "order_select_" in call.data)
+def project_set_page(call: types.CallbackQuery):
+	order_index = get_new_index(call.data)
+	global SERVICES
+	SERVICES[order_index]["selected"] = not SERVICES[order_index]["selected"]
+
+	bot.edit_message_text(tr("order"), call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "order_make")
+def project_set_page(call: types.CallbackQuery):
+	sel = []
+	selected_string = tr("order_list") + "\n"
+	for i in SERVICES:
+		if i["selected"]:
+			sel.append(i)
+	for i in sel:
+		selected_string += tr(i["button_text"]) + "\n"
+	selected_string += tr("order_confirm_button") + "\n"
+	bot.edit_message_text(selected_string, call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_back_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "order_back")
+def project_set_page(call: types.CallbackQuery):
+	bot.edit_message_text(tr("order"), call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "order_confirm")
+def project_set_page(call: types.CallbackQuery):
+	global _wait_contact
+	_wait_contact = True
+	bot.edit_message_text(tr("order_get_contact"), call.message.chat.id, call.message.id, parse_mode="HTML",
+	                      reply_markup=order_get_contact_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "order_get_contact")
+def project_set_page(call: types.CallbackQuery):
+	global _wait_contact
+	_wait_contact = False
+	bot.edit_message_text(tr("order_get_contact_final"), call.message.chat.id, call.message.id, parse_mode="HTML")
+
+
 bot.polling(none_stop=True)

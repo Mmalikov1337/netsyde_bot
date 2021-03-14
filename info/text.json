@@ -1,0 +1,146 @@
+{
+  "start": {
+    "en": "Hello",
+    "ru": "привет"
+  },
+  "start_button_about": {
+    "en": "About us",
+    "ru": "О нас"
+  },
+  "start_button_projects": {
+    "en": "Our projects",
+    "ru": "Наши проекты"
+  },
+  "start_button_order": {
+    "en": "Our services",
+    "ru": "Наши услуги"
+  },
+  "about": {
+    "en": "<strong>About us</strong>\nWe help organizations unlock potential growth in the arena of digital innovation and presence. We ideate and test concepts and turn them into business to fix their corporate strategy.",
+    "ru": "<strong>О нас</strong>\nМы помогаем организациям раскрыть потенциал роста в сфере цифровых инноваций и присутствия. Мы придумываем и тестируем концепции и превращаем их в бизнес, чтобы закрепить их корпоративную стратегию. "
+  },
+  "projects_button_info": {
+    "en": "More info",
+    "ru": "Детальная информация"
+  },
+  "projects_button_site": {
+    "en": "Project website",
+    "ru": "Сайт проекта"
+  },
+  "projects_button_back": {
+    "en": "Back",
+    "ru": "Назад"
+  },
+  "projects_decrybe": {
+    "en": "projects_decrybe website",
+    "ru": "Сайт проекта"
+  },
+  "projects_cryptobot": {
+    "en": "projects_cryptobot website",
+    "ru": "Сайт проекта"
+  },
+  "projects_decrybe-info": {
+    "en": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical \nLatin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney \nCollege in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, \nand going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes \nfrom sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, \nwritten in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first \nline of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32. ",
+    "ru": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical \nLatin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney \nCollege in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, \nand going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes \nfrom sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, \nwritten in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first \nline of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32. "
+  },
+  "projects_cryptobot-info": {
+    "en": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical \nLatin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney \nCollege in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, \nand going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes \nfrom sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, \nwritten in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first \nline of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32. ",
+    "ru": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical \nLatin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney \nCollege in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, \nand going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes \nfrom sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, \nwritten in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first \nline of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32. "
+  },
+  "order": {
+    "en": "Choose which project you want to order",
+    "ru": "Выберите какой проект Вы хотите заказать"
+  },
+  "order_contact": {
+    "en": "Specify your preferred method of communication",
+    "ru": "Укажите предпочтительный способ связи"
+  },
+  "order_price": {
+    "en": "Specify your budget",
+    "ru": "Укажите Ваш бюджет"
+  },
+  "order_pages": {
+    "en": "Select a page",
+    "ru": "Выберите страницу"
+  },
+  "order_confirm": {
+    "en": "Is that right?",
+    "ru": "Всё верно?"
+  },
+  "order_list": {
+    "en": "You selected:",
+    "ru": "Вы выбрали:"
+  },
+  "order_get_contact": {
+    "en": "The order is collected. To discuss the details, write any convenient method of communication. If you want to be contacted via telegram, click the button below.",
+    "ru": "Заказ собран. Для обсуждения деталей напишите любой удобный способ связи. Если вы хотите, чтобы с вами связались через телеграм, нажмите кномку ниже. "
+  },
+  "order_get_contact_final": {
+    "en": "We will contact you as soon as possible",
+    "ru": "Мы с вами свяжемся в ближайшее время"
+  },
+  "order_back": {
+    "en": "Back",
+    "ru": "Назад"
+  },
+  "order_make": {
+    "en": "Make order",
+    "ru": "Сделать заказ"
+  },
+  "order_dont_know": {
+    "en": "I dont know what to order",
+    "ru": "Я не знаю что заказать"
+  },
+  "order_info": {
+    "en": "I know what to order",
+    "ru": "Я знаю что заказать"
+  },
+  "order_android": {
+    "en": "Android app",
+    "ru": "Андроид приложение"
+  },
+  "order_iphone": {
+    "en": "Iphone app",
+    "ru": "Iphone приложение"
+  },
+  "order_web": {
+    "en": "Web site",
+    "ru": "Web сайт"
+  },
+  "order_web3": {
+    "en": "Web3 app",
+    "ru": "Web3 приложение"
+  },
+  "order_desktop": {
+    "en": "Desktop app",
+    "ru": "Desktop приложение"
+  },
+  "order_tg-bot": {
+    "en": "Telegram bot",
+    "ru": "Telegram бот"
+  },
+  "order_contact_telegram": {
+    "en": "Telegram",
+    "ru": "Telegram"
+  },
+  "order_contact_email": {
+    "en": "email",
+    "ru": "email"
+  },
+  "order_contact_whatsup": {
+    "en": "whatsup",
+    "ru": "whatsup"
+  },
+  "order_confirm_button": {
+    "en": "All right",
+    "ru": "Всё верно"
+  },
+  "order_not_confirm_button": {
+    "en": "Сhange order",
+    "ru": "Изменить заказ"
+  },
+  "order_get_contact_button": {
+    "en": "Connect with telegram",
+    "ru": "Связаться через телеграм"
+  }
+}
