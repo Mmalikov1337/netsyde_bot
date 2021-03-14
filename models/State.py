@@ -7,6 +7,8 @@ class State:
 	project_index = 0
 	services_page = 0
 	wait_contact = False
+	user_lang = "en"
+	lang_selected = False
 
 	def __init__(self, TEXT, URLS, PROJECTS, SERVICES, lang, on_page):
 		self.__TEXT = json.loads(TEXT)  #
@@ -35,16 +37,19 @@ class State:
 	def get_translate(self, string: str):
 		return self.__TEXT[string][self.__lang]
 
+	def is_lang_native(self):
+		return self.user_lang == self.__lang
+
 	# PROJECT
 	def next_proj(self):
-		if self.project_index + 1 >= len(self.__PROJECTS):
+		if self.project_index + 1 >= self.projects_len:
 			self.project_index = 0
 		else:
 			self.project_index += 1
 
 	def prev_proj(self):
 		if self.project_index - 1 < 0:
-			self.project_index = len(self.__PROJECTS) - 1
+			self.project_index = self.projects_len - 1
 		else:
 			self.project_index -= 1
 

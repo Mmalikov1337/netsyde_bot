@@ -17,6 +17,18 @@ state = State(
 
 
 # KEYBOARDS
+# WELCOME
+def welcome_kb():
+	markup = types.ReplyKeyboardMarkup(row_width=1)
+	markup.add(
+		types.KeyboardButton(state.get_translate("start_button_about")),
+		types.KeyboardButton(state.get_translate("start_button_projects")),
+		types.KeyboardButton(state.get_translate("start_button_order")),
+		types.KeyboardButton(state.get_translate("lang_change"))
+	)
+	return markup
+
+
 # Projects
 def project_kb():
 	markup = types.InlineKeyboardMarkup()
@@ -123,7 +135,8 @@ def get_str_checker(text: str):
 
 @bot.middleware_handler(update_types=["message"])
 def modify_message(_: telebot.TeleBot, message: types.Message):
-	print("from:", message.from_user.to_dict()["username"], message.from_user.to_dict()["language_code"], message)
+	state.user_lang = str(message.from_user.to_dict()["language_code"])
+	print("from:", message.from_user.to_dict()["username"], state.user_lang, message)
 	if message.sticker:
 		print("file_id:", message.sticker.file_id)
 	else:
@@ -132,20 +145,37 @@ def modify_message(_: telebot.TeleBot, message: types.Message):
 
 @bot.message_handler(commands=["start"])
 def welcome(msg: types.Message):
-	markup = types.ReplyKeyboardMarkup(row_width=1)
-	markup.add(
-		types.KeyboardButton(state.get_translate("start_button_about")),
-		types.KeyboardButton(state.get_translate("start_button_projects")),
-		types.KeyboardButton(state.get_translate("start_button_order")),
-		types.KeyboardButton("Change language \U0001F202")
-	)
-	bot.send_message(msg.chat.id, state.get_translate('start'), parse_mode="HTML", reply_markup=markup)
+	bot.send_message(msg.chat.id, state.get_translate('start'), parse_mode="HTML", reply_markup=welcome_kb())
 
 
 @bot.message_handler(func=lambda call: state.wait_contact)
 def get_contact(msg: types.Message):
 	state.wait_contact = False
 	bot.edit_message_text(state.get_translate("order_get_contact_final"), msg.chat.id, msg.id - 1, parse_mode="HTML")
+
+
+# LANG
+@bot.message_handler(func=get_str_checker("lang_change"))
+def language(msg: types.Message):
+	print(state.get_translate("lang_change"))
+	markup = types.InlineKeyboardMarkup(row_width=1)
+	markup.add(
+		types.InlineKeyboardButton(state.get_translate("lang_set_ru"), callback_data="lang_set_ru"),
+		types.InlineKeyboardButton(state.get_translate("lang_set_en"), callback_data="lang_set_en")
+	)
+	bot.send_message(msg.chat.id, state.get_translate("lang"), parse_mode="HTML", reply_markup=markup)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "lang_set_ru")
+def lang_set_ru(call: types.CallbackQuery):
+	state.set_lang("ru")
+	bot.send_message(call.message.chat.id, state.get_translate('start'), parse_mode="HTML", reply_markup=welcome_kb())
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "lang_set_en")
+def lang_set_en(call: types.CallbackQuery):
+	state.set_lang("en")
+	bot.send_message(call.message.chat.id, state.get_translate('start'), parse_mode="HTML", reply_markup=welcome_kb())
 
 
 # ABOUT
@@ -278,6 +308,30 @@ def project_set_page(call: types.CallbackQuery):
 	state.wait_contact = False
 	bot.edit_message_text(state.get_translate("order_get_contact_final"), call.message.chat.id, call.message.id,
 	                      parse_mode="HTML")
+
+
+@bot.message_handler(func=lambda x: not state.lang_selected and not state.is_lang_native())
+def any(msg: types.Message):
+	markup = types.InlineKeyboardMarkup(row_width=2)
+	markup.row(
+		types.InlineKeyboardButton("yes", callback_data=f"lang_set_native"),
+		types.InlineKeyboardButton("no", callback_data=f"lang_not_set_native"),
+	)
+	print("\nasd\n")
+
+	m = "do you want to change lang?"
+	bot.send_message(msg.chat.id, m, parse_mode="HTML", reply_markup=markup)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "lang_set_native")
+def lang_set_native(call: types.CallbackQuery):
+	state.set_lang(state.user_lang)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "lang_not_set_native")
+def lang_not_set_native(call: types.CallbackQuery):
+	state.lang_selected = True
+	bot.send_message(call.message.chat.id, state.get_translate('start'), parse_mode="HTML", reply_markup=welcome_kb())
 
 
 bot.polling(none_stop=True)

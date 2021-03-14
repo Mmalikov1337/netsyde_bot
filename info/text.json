@@ -15,6 +15,30 @@
     "en": "Our services",
     "ru": "Наши услуги"
   },
+  "lang": {
+    "en": "Select language",
+    "ru": "Выберите язык"
+  },
+  "lang_change": {
+    "en": "Change language",
+    "ru": "Сменить язык"
+  },
+  "lang_set_ru": {
+    "en": "Russian",
+    "ru": "Русский"
+  },
+  "lang_set_ru_final": {
+    "en": "Russian",
+    "ru": "Русский"
+  },
+  "lang_set_en": {
+    "en": "English",
+    "ru": "Английский"
+  },
+  "lang_set_en_final": {
+    "en": "English",
+    "ru": "Английский"
+  },
   "about": {
     "en": "<strong>About us</strong>\nWe help organizations unlock potential growth in the arena of digital innovation and presence. We ideate and test concepts and turn them into business to fix their corporate strategy.",
     "ru": "<strong>О нас</strong>\nМы помогаем организациям раскрыть потенциал роста в сфере цифровых инноваций и присутствия. Мы придумываем и тестируем концепции и превращаем их в бизнес, чтобы закрепить их корпоративную стратегию. "
