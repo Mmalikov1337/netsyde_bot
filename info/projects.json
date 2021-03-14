@@ -1,14 +1,14 @@
 [
   {
     "name": "decrybe",
-    "image": "media/images/cc.png",
+    "image": "media/images/dec.png",
     "description": "projects_decrybe",
     "info": "projects_decrybe-info",
     "site": "netsy.de"
   },
   {
     "name": "crypto",
-    "image": "media/images/dec.png",
+    "image": "media/images/cc.png",
     "description": "projects_cryptobot",
     "info": "projects_decrybe-info",
     "site": "netsy.de"
