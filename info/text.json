@@ -111,6 +111,10 @@
     "en": "Make order",
     "ru": "Сделать заказ"
   },
+  "order_make_not_selected": {
+    "en": "You did not selected",
+    "ru": "Вы ничего не выбрали"
+  },
   "order_dont_know": {
     "en": "I dont know what to order",
     "ru": "Я не знаю что заказать"
